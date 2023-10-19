@@ -6,6 +6,35 @@
 2. Nginx
 3. Certbot (For SSL setup)
 
+## Add user:
+
+
+1. Log in as root.
+2. Create a new user:
+
+```shell
+adduser <username>
+```
+
+3. Follow the prompts in the CLI to finish creating the user.
+4. Grant the new user administrative privileges:
+```shell
+usermod -aG sudo <username>
+```
+You can now run commands with superuser privileges by using sudo before the command.
+5. Follow the steps to set up SSH for the new user: Add Public Key Authentication.
+6. Log out of the droplet.
+7. Log in using SSH as the new user.
+
+Install caddy:
+```shell
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+```
+
 ## Step 1: Installing Docker
 
 First, you need to update your system's package list by running:
@@ -18,6 +47,20 @@ Then, you can install Docker by running:
 
 ```shell
 sudo snap install docker
+```
+
+## Step 1.1:
+
+```shell
+sudo docker volume create caddy_data
+```
+```shell
+sudo docker volume create n8n_data
+```
+## Open Ports
+```shell
+sudo ufw allow 80
+sudo ufw allow 443
 ```
 
 ## Step 2: Starting n8n in Docker
